@@ -28,7 +28,7 @@ public class BullingService {
 
         List<BullingRecord> savedBullingRecords = bullingRepo.saveAll(bullingRecords);
 
-       return savedBullingRecords.stream()
+        return savedBullingRecords.stream()
                 .map(savedBullingRecord -> responseParser.bullingRecordToText(savedBullingRecord))
                 .toList();
     }
@@ -51,12 +51,12 @@ public class BullingService {
                         String.valueOf(nowEpochSeconds)
                 ),
                 chatId,
-                userMention,
+                userMention.trim(),
                 nowEpochSeconds
         );
     }
 
-    private String generateId(String chatId, String mention, String date) {
-        return String.join("-", String.valueOf(chatId), mention, String.valueOf(date));
+    private int generateId(String chatId, String mention, String date) {
+        return 1;
     }
 }

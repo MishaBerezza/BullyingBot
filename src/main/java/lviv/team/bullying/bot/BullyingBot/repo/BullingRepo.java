@@ -7,9 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BullingRepo extends MongoRepository<String, BullingRecord> {
+public interface BullingRepo extends MongoRepository<BullingRecord, Integer> {
 
-    List<BullingRecord> saveAll(List<BullingRecord> entities);
-
-    List<BullingRecord> getByUserTag(String userTag);
+    @Override
+    <S extends BullingRecord> List<S> saveAll(Iterable<S> entities);
 }

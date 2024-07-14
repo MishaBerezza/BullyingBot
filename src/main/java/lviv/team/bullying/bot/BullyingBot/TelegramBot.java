@@ -2,8 +2,6 @@ package lviv.team.bullying.bot.BullyingBot;
 
 import lviv.team.bullying.bot.BullyingBot.config.BotConfig;
 import lviv.team.bullying.bot.BullyingBot.processor.BullingCommandProcessor;
-import lviv.team.bullying.bot.BullyingBot.response.DefaultResponses;
-import lviv.team.bullying.bot.BullyingBot.services.BullingService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
