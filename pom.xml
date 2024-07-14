@@ -12,27 +12,22 @@
 	<artifactId>BullyingBot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>BullyingBot</name>
-	<description>Demo project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+
+	<packaging>jar</packaging>
+
 	<properties>
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+        <!-- SPRING-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -49,10 +44,11 @@
 		</dependency>
 
 
+		<!--MONGO DB-->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>4.3.1</version>
 		</dependency>
 	</dependencies>
 

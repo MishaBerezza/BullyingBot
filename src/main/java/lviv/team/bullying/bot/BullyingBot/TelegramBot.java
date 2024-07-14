@@ -1,6 +1,9 @@
 package lviv.team.bullying.bot.BullyingBot;
 
 import lviv.team.bullying.bot.BullyingBot.config.BotConfig;
+import lviv.team.bullying.bot.BullyingBot.processor.BullingCommandProcessor;
+import lviv.team.bullying.bot.BullyingBot.response.DefaultResponses;
+import lviv.team.bullying.bot.BullyingBot.services.BullingService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,9 +16,11 @@ import java.util.Objects;
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
+    private final BullingCommandProcessor bullingCommandProcessor;
 
-    public TelegramBot( BotConfig botConfig) {
+    public TelegramBot(BotConfig botConfig, BullingCommandProcessor bullingCommandProcessor) {
         this.botConfig = botConfig;
+        this.bullingCommandProcessor = bullingCommandProcessor;
     }
 
     @Override
@@ -31,10 +36,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Long chatId = update.getMessage().getChatId();
+
         if (Objects.isNull(update.getMessage().getText())) {
-            sendMessage(chatId, "ablalbl");
+            sendMessage(chatId, "something went wrong");
         }
-        sendMessage(chatId, "HI");
+
+        bullingCommandProcessor.processCommand(chatId, update.getMessage().getEntities());
+
     }
 
 
