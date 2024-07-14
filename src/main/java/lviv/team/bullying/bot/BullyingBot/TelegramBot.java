@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -39,8 +40,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             sendMessage(chatId, "something went wrong");
         }
 
-        bullingCommandProcessor.processCommand(chatId, update.getMessage().getEntities());
+        List<String> messagesForSend = bullingCommandProcessor.processCommand(chatId, update.getMessage().getEntities());
 
+        messagesForSend.forEach(message -> sendMessage(chatId, message));
     }
 
 
