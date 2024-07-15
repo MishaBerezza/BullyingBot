@@ -53,6 +53,10 @@ public class BullingService {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
 
+        if (bullingRecords.isEmpty()){
+            return responseParser.buildGetRecordsEmptyResulText();
+        }
+
         return responseParser.buildGetRecordsText(bullingRecords);
     }
 

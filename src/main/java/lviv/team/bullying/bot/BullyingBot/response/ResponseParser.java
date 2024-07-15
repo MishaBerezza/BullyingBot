@@ -16,13 +16,15 @@ import java.util.stream.Collectors;
 public class ResponseParser {
 
     public String buildSaveRecordText(BullingRecord bullingRecord) {
-        String text = "This shit was recorded " +
-                bullingRecord.getUserTag() +
-                "\n" +
-                " at " +
-                getDateFromEpochSeconds(bullingRecord.getDate());
+        StringBuilder text = new StringBuilder();
 
-        return text;
+        text.append(bullingRecord.getUserTag());
+        text.append("\n");
+        text.append("This shit was recorded ");
+        text.append(" at ");
+        text.append(getDateFromEpochSeconds(bullingRecord.getDate()));
+
+        return text.toString();
     }
 
     public List<String> buildGetRecordsText(Set<BullingRecord> bullingRecords) {
@@ -68,7 +70,7 @@ public class ResponseParser {
         Instant instant = Instant.ofEpochSecond(epochSeconds);
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Europe/Kyiv"));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
         return zonedDateTime.format(formatter);
     }
 }
