@@ -5,6 +5,7 @@ import lviv.team.bullying.bot.BullyingBot.core.commands.BullingCommands;
 import lviv.team.bullying.bot.BullyingBot.core.commands.Command;
 import lviv.team.bullying.bot.BullyingBot.core.commands.DefaultCommands;
 import lviv.team.bullying.bot.BullyingBot.core.entity.MessageEntityType;
+import lviv.team.bullying.bot.BullyingBot.core.exception.BullingBotException;
 import lviv.team.bullying.bot.BullyingBot.core.exception.CommandEntityNotFoundException;
 import lviv.team.bullying.bot.BullyingBot.core.exception.UnknownCommandException;
 import lviv.team.bullying.bot.BullyingBot.processor.BullingCommandProcessor;
@@ -48,13 +49,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Long chatId = update.getMessage().getChatId();
 
-        if (Objects.isNull(update.getMessage().getText())) {
-            sendMessage(chatId, "something went wrong");
+        try {
+        List<MessageEntity> messageEntities = update.getMessage().getEntities();
+
+        if (Objects.isNull(messageEntities) || messageEntities.isEmpty()){
+            throw new UnknownCommandException();
         }
 
-
-        try {
-            Optional<MessageEntity> maybeBotCommandEntity = update.getMessage().getEntities().stream()
+            Optional<MessageEntity> maybeBotCommandEntity = messageEntities.stream()
                     .filter(this::checkIsBotCommand)
                     .findFirst();
 
@@ -62,12 +64,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             CommandProcessor commandProcessorByCommand = getCommandProcessorByCommand(botCommandMessageEntity.getText());
 
-            List<String> messagesForSend = commandProcessorByCommand.processCommand(chatId, update.getMessage().getEntities());
+            List<String> messagesForSend = commandProcessorByCommand.processCommand(chatId, messageEntities);
 
             messagesForSend.forEach(message -> sendMessage(chatId, message));
 
-        } catch (RuntimeException runtimeException) {
-            sendMessage(chatId, runtimeException.getMessage());
+        } catch (BullingBotException bullingBotException) {
+            sendMessage(chatId, bullingBotException.getMessage());
+        }catch (RuntimeException runtimeException){
+            sendMessage(chatId, "Something went wrong");
         }
     }
 

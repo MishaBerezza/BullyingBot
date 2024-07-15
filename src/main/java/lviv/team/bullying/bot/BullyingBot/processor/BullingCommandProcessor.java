@@ -3,8 +3,7 @@ package lviv.team.bullying.bot.BullyingBot.processor;
 import lviv.team.bullying.bot.BullyingBot.core.commands.BullingCommands;
 import lviv.team.bullying.bot.BullyingBot.core.entity.MessageEntityType;
 import lviv.team.bullying.bot.BullyingBot.core.exception.CommandEntityNotFoundException;
-import lviv.team.bullying.bot.BullyingBot.core.exception.InvalidCommandContent;
-import lviv.team.bullying.bot.BullyingBot.core.exception.UnknownCommandException;
+import lviv.team.bullying.bot.BullyingBot.core.exception.InvalidCommandContentException;
 import lviv.team.bullying.bot.BullyingBot.services.BullingService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
@@ -56,7 +55,7 @@ public class BullingCommandProcessor implements CommandProcessor {
                 .toList();
 
         if (mentionMessageEntities.isEmpty()) {
-            throw new InvalidCommandContent("This command have to contain user mention");
+            throw new InvalidCommandContentException("This command have to contain user mention");
         }
         return mentionMessageEntities;
     }

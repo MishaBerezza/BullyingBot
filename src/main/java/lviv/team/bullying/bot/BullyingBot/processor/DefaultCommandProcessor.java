@@ -1,6 +1,5 @@
 package lviv.team.bullying.bot.BullyingBot.processor;
 
-import lviv.team.bullying.bot.BullyingBot.core.commands.BullingCommands;
 import lviv.team.bullying.bot.BullyingBot.core.commands.DefaultCommands;
 import lviv.team.bullying.bot.BullyingBot.core.entity.MessageEntityType;
 import lviv.team.bullying.bot.BullyingBot.core.exception.CommandEntityNotFoundException;
@@ -30,6 +29,9 @@ public class DefaultCommandProcessor implements CommandProcessor {
 
         if (DefaultCommands.START.getCommand().equals(command)){
             return List.of(defaultResponseManager.getResponseForStart());
+        }
+        if (DefaultCommands.HELP.getCommand().equals(command)){
+            return List.of(defaultResponseManager.getResponseForHelp());
         }
 
         return List.of("I don't know this command");
