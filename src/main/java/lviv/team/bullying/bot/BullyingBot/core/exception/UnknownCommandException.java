@@ -1,10 +1,10 @@
 package lviv.team.bullying.bot.BullyingBot.core.exception;
 
-import lviv.team.bullying.bot.BullyingBot.response.DefaultResponses;
+import lviv.team.bullying.bot.BullyingBot.response.DefaultResponseMessages;
 
 public class UnknownCommandException extends RuntimeException{
 
     public UnknownCommandException() {
-        super(DefaultResponses.UNKNOWN_COMMAND.getText());
+        super(DefaultResponseMessages.UNKNOWN_COMMAND.getText());
     }
 }

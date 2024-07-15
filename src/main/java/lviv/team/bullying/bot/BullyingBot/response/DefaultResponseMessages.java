@@ -1,6 +1,9 @@
 package lviv.team.bullying.bot.BullyingBot.response;
 
-public enum DefaultResponses {
+import lombok.Getter;
+
+@Getter
+public enum DefaultResponseMessages {
     UNKNOWN_COMMAND("Guys, I don't know this command"),
     COMMAND_NOT_FOUND("Command not found"),
     INVALID_COMMAND_CONTENT("Invalid command content");
@@ -9,11 +12,8 @@ public enum DefaultResponses {
     final String text;
 
 
-    DefaultResponses(String text) {
+    DefaultResponseMessages(String text) {
         this.text = text;
     }
 
-    public String getText() {
-        return text;
-    }
 }

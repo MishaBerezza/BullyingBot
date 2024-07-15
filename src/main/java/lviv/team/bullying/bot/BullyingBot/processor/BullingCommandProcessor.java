@@ -17,7 +17,6 @@ public class BullingCommandProcessor implements CommandProcessor {
 
     BullingService bullingService;
 
-
     public BullingCommandProcessor(BullingService bullingService) {
         this.bullingService = bullingService;
     }
@@ -27,9 +26,7 @@ public class BullingCommandProcessor implements CommandProcessor {
                 .filter(this::checkIsBotCommand)
                 .findFirst();
 
-        MessageEntity botCommandMessageEntity = maybeBotCommandEntity.orElseThrow(CommandEntityNotFoundException::new);
-
-        String command = getCommandFromMessageEntity(botCommandMessageEntity);
+        String command = maybeBotCommandEntity.orElseThrow(CommandEntityNotFoundException::new).getText();
 
 
         if (BullingCommands.SAVE.getCommand().equals(command)) {
@@ -63,15 +60,6 @@ public class BullingCommandProcessor implements CommandProcessor {
         }
         return mentionMessageEntities;
     }
-
-    private String getCommandFromMessageEntity(MessageEntity messageEntity) {
-        return Optional.of(messageEntity).stream()
-                .map(MessageEntity::getText)
-                .filter(BullingCommands::isCommandExists)
-                .findFirst()
-                .orElseThrow(UnknownCommandException::new);
-    }
-
 
     private boolean checkIsMention(MessageEntity messageEntity) {
         return messageEntity.getType().equals(MessageEntityType.MENTION.getType());

@@ -2,7 +2,7 @@ package lviv.team.bullying.bot.BullyingBot.services;
 
 import lviv.team.bullying.bot.BullyingBot.core.document.BullingRecord;
 import lviv.team.bullying.bot.BullyingBot.repo.BullingRepo;
-import lviv.team.bullying.bot.BullyingBot.response.ResponseParser;
+import lviv.team.bullying.bot.BullyingBot.response.BullingResponseParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
@@ -20,7 +20,7 @@ public class BullingService {
     BullingRepo bullingRepo;
 
     @Autowired
-    ResponseParser responseParser;
+    BullingResponseParser bullingResponseParser;
 
     public List<String> saveBullingRecords(long chatId, List<MessageEntity> messageEntities) {
 
@@ -31,7 +31,7 @@ public class BullingService {
         List<BullingRecord> savedBullingRecords = bullingRepo.saveAll(bullingRecords);
 
         return savedBullingRecords.stream()
-                .map(savedBullingRecord -> responseParser.buildSaveRecordText(savedBullingRecord))
+                .map(savedBullingRecord -> bullingResponseParser.buildSaveRecordText(savedBullingRecord))
                 .toList();
     }
 
@@ -39,10 +39,10 @@ public class BullingService {
         Set<BullingRecord> bullingRecords = Set.copyOf(bullingRepo.findByChatId(chatId));
 
         if (bullingRecords.isEmpty()) {
-            return responseParser.buildGetRecordsEmptyResulText();
+            return bullingResponseParser.buildGetRecordsEmptyResulText();
         }
 
-        return responseParser.buildGetRecordsText(bullingRecords);
+        return bullingResponseParser.buildGetRecordsText(bullingRecords);
     }
 
     public List<String> getBullingRecordsByUserTag(long chatId, List<MessageEntity> messageEntities) {
@@ -54,10 +54,10 @@ public class BullingService {
                 .collect(Collectors.toSet());
 
         if (bullingRecords.isEmpty()){
-            return responseParser.buildGetRecordsEmptyResulText();
+            return bullingResponseParser.buildGetRecordsEmptyResulText();
         }
 
-        return responseParser.buildGetRecordsText(bullingRecords);
+        return bullingResponseParser.buildGetRecordsText(bullingRecords);
     }
 
 

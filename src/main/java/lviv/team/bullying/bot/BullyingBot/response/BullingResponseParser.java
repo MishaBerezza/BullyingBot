@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class ResponseParser {
+public class BullingResponseParser {
 
     public String buildSaveRecordText(BullingRecord bullingRecord) {
         StringBuilder text = new StringBuilder();
