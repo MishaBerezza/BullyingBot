@@ -14,6 +14,7 @@ import lviv.team.bullying.bot.BullyingBot.processor.DefaultCommandProcessor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -48,6 +49,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Long chatId = update.getMessage().getChatId();
+
+        System.out.println(update);
 
         try {
         List<MessageEntity> messageEntities = update.getMessage().getEntities();

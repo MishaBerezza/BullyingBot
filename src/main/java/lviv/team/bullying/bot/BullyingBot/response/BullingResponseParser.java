@@ -22,6 +22,8 @@ public class BullingResponseParser {
         text.append("\n");
         text.append("This shit was recorded ");
         text.append(" at ");
+        text.append("\n");
+
         text.append(getDateFromEpochSeconds(bullingRecord.getDate()));
 
         return text.toString();
