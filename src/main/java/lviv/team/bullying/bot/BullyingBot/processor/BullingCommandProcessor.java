@@ -50,7 +50,7 @@ public class BullingCommandProcessor implements CommandProcessor {
             return bullingService.getBullingRecordsByUserTag(chatId, mentionTypeEntities);
         }
 
-        return List.of("I don't know this command 2");
+        return List.of("I don't know this command");
     }
 
     private List<MessageEntity> getMessageEntitiesWithMentionType(List<MessageEntity> messageEntities) {
