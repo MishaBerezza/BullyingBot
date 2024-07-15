@@ -1,15 +1,15 @@
 package lviv.team.bullying.bot.BullyingBot.services;
 
-import lviv.team.bullying.bot.BullyingBot.document.BullingRecord;
+import lviv.team.bullying.bot.BullyingBot.core.document.BullingRecord;
 import lviv.team.bullying.bot.BullyingBot.repo.BullingRepo;
 import lviv.team.bullying.bot.BullyingBot.response.ResponseParser;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BullingService {
@@ -29,15 +29,15 @@ public class BullingService {
         List<BullingRecord> savedBullingRecords = bullingRepo.saveAll(bullingRecords);
 
         return savedBullingRecords.stream()
-                .map(savedBullingRecord -> responseParser.bullingRecordToText(savedBullingRecord))
+                .map(savedBullingRecord -> responseParser.buildSaveRecordText(savedBullingRecord))
                 .toList();
     }
 
-//    public String getBullingRecords(long chatId, List<MessageEntity> messageEntities) {
-//
-//        List<BullingRecord> bullingRecords = messageEntities.stream().map(messageEntity -> buildBullingRecord(chatId, messageEntity)).toList();
-//
-//    }
+    public List<String> getAllBullingRecords(long chatId) {
+        Set<BullingRecord> bullingRecords = Set.copyOf(bullingRepo.findByChatId(chatId));
+
+        return responseParser.buildGetRecordsText(bullingRecords);
+    }
 
 
     private BullingRecord buildBullingRecord(long chatId, MessageEntity messageEntity) {
@@ -56,7 +56,7 @@ public class BullingService {
         );
     }
 
-    private int generateId(String chatId, String mention, String date) {
-        return 1;
+    private String generateId(String chatId, String mention, String date) {
+        return String.join("-", String.valueOf(chatId), mention, String.valueOf(date));
     }
 }

@@ -1,9 +1,9 @@
 package lviv.team.bullying.bot.BullyingBot.processor;
 
 import lviv.team.bullying.bot.BullyingBot.commands.BullingCommands;
-import lviv.team.bullying.bot.BullyingBot.entity.EntityTypes;
-import lviv.team.bullying.bot.BullyingBot.exception.CommandEntityNotFoundException;
-import lviv.team.bullying.bot.BullyingBot.exception.UnknownCommandException;
+import lviv.team.bullying.bot.BullyingBot.core.entity.MessageEntityType;
+import lviv.team.bullying.bot.BullyingBot.core.exception.CommandEntityNotFoundException;
+import lviv.team.bullying.bot.BullyingBot.core.exception.UnknownCommandException;
 import lviv.team.bullying.bot.BullyingBot.services.BullingService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
@@ -30,14 +30,23 @@ public class BullingCommandProcessor implements CommandProcessor {
 
         String command = getCommandFromMessageEntity(botCommandMessageEntity);
 
-        List<MessageEntity> mentionMessageEntityList = messageEntities.stream().filter(this::checkIsMention).toList();
-
 
         if (BullingCommands.SAVE.getCommand().equals(command)) {
+            List<MessageEntity> mentionMessageEntityList = messageEntities.stream()
+                    .filter(this::checkIsMention)
+                    .toList();
+
             return bullingService.saveBullingRecords(chatId, mentionMessageEntityList);
-        } else {
+        }
+
+        if (BullingCommands.GET_RECORDS.getCommand().equals(command)) {
+            return bullingService.getAllBullingRecords(chatId);
+        }
+        if (BullingCommands.GET_RECORDS_BY_NAME.getCommand().equals(command)) {
             return List.of("I don't know this command");
         }
+
+        return List.of("I don't know this command 2");
     }
 
     private String getCommandFromMessageEntity(MessageEntity messageEntity) {
@@ -50,10 +59,10 @@ public class BullingCommandProcessor implements CommandProcessor {
 
 
     private boolean checkIsMention(MessageEntity messageEntity) {
-        return messageEntity.getType().equals(EntityTypes.MENTION.getType());
+        return messageEntity.getType().equals(MessageEntityType.MENTION.getType());
     }
 
     private boolean checkIsBotCommand(MessageEntity messageEntity) {
-        return messageEntity.getType().equals(EntityTypes.BOT_COMMAND.getType());
+        return messageEntity.getType().equals(MessageEntityType.BOT_COMMAND.getType());
     }
 }

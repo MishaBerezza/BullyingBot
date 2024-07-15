@@ -1,12 +1,12 @@
-package lviv.team.bullying.bot.BullyingBot.entity;
+package lviv.team.bullying.bot.BullyingBot.core.entity;
 
-public enum EntityTypes {
+public enum MessageEntityType {
     MENTION("mention"),
     BOT_COMMAND("bot_command");
 
     private String type;
 
-     EntityTypes(String type) {
+     MessageEntityType(String type) {
         this.type = type;
     }
 

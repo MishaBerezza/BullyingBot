@@ -1,25 +1,62 @@
 package lviv.team.bullying.bot.BullyingBot.response;
 
-import lviv.team.bullying.bot.BullyingBot.document.BullingRecord;
+import lviv.team.bullying.bot.BullyingBot.core.document.BullingRecord;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class ResponseParser {
 
-    public String bullingRecordToText(BullingRecord bullingRecord) {
+    public String buildSaveRecordText(BullingRecord bullingRecord) {
+        String text = "This shit was recorded " +
+                bullingRecord.getUserTag() +
+                "\n" +
+                " at " +
+                getDateFromEpochSeconds(bullingRecord.getDate());
+
+        return text;
+    }
+
+    public List<String> buildGetRecordsText(Set<BullingRecord> bullingRecords) {
+        Map<String, List<BullingRecord>> userToRecords = groupByUser(bullingRecords);
+
+
+        return userToRecords.entrySet()
+                .stream()
+                .map(entry -> buildTextForGetRecords(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+
+    public String buildTextForGetRecords(String userTag, List<BullingRecord> bullingRecords) {
         StringBuilder text = new StringBuilder();
-        text.append("This shit was recorded ")
-                .append(bullingRecord.getUserTag())
-                .append("\n")
-                .append(" at ")
-                .append(getDateFromEpochSeconds(bullingRecord.getDate()));
+
+        text.append(userTag);
+        text.append("\n");
+        text.append("This shit has " + bullingRecords.size() + " bulling records.");
+        text.append("\n");
+
+
+        bullingRecords.forEach(bullingRecord -> {
+            String textDate = getDateFromEpochSeconds(bullingRecord.getDate());
+
+            text.append(textDate).append("\n");
+        });
 
         return text.toString();
+    }
+
+    public Map<String, List<BullingRecord>> groupByUser(Set<BullingRecord> bullingRecords) {
+        return bullingRecords.stream().collect(Collectors.groupingBy(BullingRecord::getUserTag));
+
     }
 
     private String getDateFromEpochSeconds(long epochSeconds) {

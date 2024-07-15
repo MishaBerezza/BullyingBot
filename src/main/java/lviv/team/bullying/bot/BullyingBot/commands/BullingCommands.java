@@ -8,7 +8,7 @@ import java.util.Arrays;
 @Getter
 public enum BullingCommands {
     SAVE("/save"),
-    GET_RECORDS("/get_records"),
+    GET_RECORDS("/getRecords"),
     GET_RECORDS_BY_NAME("/get_records_by_name");
 
 

@@ -1,4 +1,4 @@
-package lviv.team.bullying.bot.BullyingBot.exception;
+package lviv.team.bullying.bot.BullyingBot.core.exception;
 
 import lviv.team.bullying.bot.BullyingBot.response.DefaultResponses;
 
