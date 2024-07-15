@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -34,6 +33,12 @@ public class ResponseParser {
                 .stream()
                 .map(entry -> buildTextForGetRecords(entry.getKey(), entry.getValue()))
                 .toList();
+    }
+
+    public List<String> buildGetRecordsEmptyResulText() {
+        String text = "I don't find any records";
+
+        return List.of(text);
     }
 
     public String buildTextForGetRecords(String userTag, List<BullingRecord> bullingRecords) {

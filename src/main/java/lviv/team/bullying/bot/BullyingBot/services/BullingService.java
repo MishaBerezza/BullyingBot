@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BullingService {
@@ -33,8 +35,23 @@ public class BullingService {
                 .toList();
     }
 
-    public List<String> getAllBullingRecords(long chatId) {
+    public List<String> getAllBullingRecordsByChatId(long chatId) {
         Set<BullingRecord> bullingRecords = Set.copyOf(bullingRepo.findByChatId(chatId));
+
+        if (bullingRecords.isEmpty()) {
+            return responseParser.buildGetRecordsEmptyResulText();
+        }
+
+        return responseParser.buildGetRecordsText(bullingRecords);
+    }
+
+    public List<String> getBullingRecordsByUserTag(long chatId, List<MessageEntity> messageEntities) {
+        Set<BullingRecord> bullingRecords = messageEntities.stream()
+                .map(messageEntity ->
+                        bullingRepo.findByChatIdAndUserTag(chatId, messageEntity.getText())
+                )
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
 
         return responseParser.buildGetRecordsText(bullingRecords);
     }

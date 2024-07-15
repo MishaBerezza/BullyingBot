@@ -43,9 +43,13 @@ public class TelegramBot extends TelegramLongPollingBot {
         System.out.println(update.getMessage());
 
 
-        List<String> messagesForSend = bullingCommandProcessor.processCommand(chatId, update.getMessage().getEntities());
+        try {
+            List<String> messagesForSend = bullingCommandProcessor.processCommand(chatId, update.getMessage().getEntities());
 
-        messagesForSend.forEach(message -> sendMessage(chatId, message));
+            messagesForSend.forEach(message -> sendMessage(chatId, message));
+        } catch (RuntimeException runtimeException) {
+            sendMessage(chatId, runtimeException.getMessage());
+        }
     }
 
 

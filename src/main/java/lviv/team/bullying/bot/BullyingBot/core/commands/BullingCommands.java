@@ -1,4 +1,4 @@
-package lviv.team.bullying.bot.BullyingBot.commands;
+package lviv.team.bullying.bot.BullyingBot.core.commands;
 
 import lombok.Getter;
 
@@ -8,8 +8,8 @@ import java.util.Arrays;
 @Getter
 public enum BullingCommands {
     SAVE("/save"),
-    GET_RECORDS("/getRecords"),
-    GET_RECORDS_BY_NAME("/get_records_by_name");
+    GET_RECORDS("/getAll"),
+    GET_RECORDS_BY_NAME("/get");
 
 
     private final String command;

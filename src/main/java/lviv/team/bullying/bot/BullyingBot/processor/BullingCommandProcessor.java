@@ -1,8 +1,9 @@
 package lviv.team.bullying.bot.BullyingBot.processor;
 
-import lviv.team.bullying.bot.BullyingBot.commands.BullingCommands;
+import lviv.team.bullying.bot.BullyingBot.core.commands.BullingCommands;
 import lviv.team.bullying.bot.BullyingBot.core.entity.MessageEntityType;
 import lviv.team.bullying.bot.BullyingBot.core.exception.CommandEntityNotFoundException;
+import lviv.team.bullying.bot.BullyingBot.core.exception.InvalidCommandContent;
 import lviv.team.bullying.bot.BullyingBot.core.exception.UnknownCommandException;
 import lviv.team.bullying.bot.BullyingBot.services.BullingService;
 import org.springframework.stereotype.Component;
@@ -32,21 +33,35 @@ public class BullingCommandProcessor implements CommandProcessor {
 
 
         if (BullingCommands.SAVE.getCommand().equals(command)) {
-            List<MessageEntity> mentionMessageEntityList = messageEntities.stream()
-                    .filter(this::checkIsMention)
-                    .toList();
+            List<MessageEntity> mentionMessageEntityList =
+                    getMessageEntitiesWithMentionType(messageEntities);
+
 
             return bullingService.saveBullingRecords(chatId, mentionMessageEntityList);
         }
 
         if (BullingCommands.GET_RECORDS.getCommand().equals(command)) {
-            return bullingService.getAllBullingRecords(chatId);
+            return bullingService.getAllBullingRecordsByChatId(chatId);
         }
         if (BullingCommands.GET_RECORDS_BY_NAME.getCommand().equals(command)) {
-            return List.of("I don't know this command");
+            List<MessageEntity> mentionTypeEntities =
+                    getMessageEntitiesWithMentionType(messageEntities);
+
+            return bullingService.getBullingRecordsByUserTag(chatId, mentionTypeEntities);
         }
 
         return List.of("I don't know this command 2");
+    }
+
+    private List<MessageEntity> getMessageEntitiesWithMentionType(List<MessageEntity> messageEntities) {
+        List<MessageEntity> mentionMessageEntities = messageEntities.stream()
+                .filter(this::checkIsMention)
+                .toList();
+
+        if (mentionMessageEntities.isEmpty()) {
+            throw new InvalidCommandContent("This command have to contain user mention");
+        }
+        return mentionMessageEntities;
     }
 
     private String getCommandFromMessageEntity(MessageEntity messageEntity) {

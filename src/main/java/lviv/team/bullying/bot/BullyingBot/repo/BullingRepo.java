@@ -16,4 +16,6 @@ public interface BullingRepo extends MongoRepository<BullingRecord, Integer> {
     @Query(value = "{ 'chatId' : ?0 }")
     List<BullingRecord> findByChatId(long chatId);
 
+    @Query(value = "{ 'chatId' : ?0, userTag: ?1 }")
+    List<BullingRecord> findByChatIdAndUserTag(long chatId, String userTag);
 }
