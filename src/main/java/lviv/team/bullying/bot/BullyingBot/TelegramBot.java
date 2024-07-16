@@ -11,10 +11,10 @@ import lviv.team.bullying.bot.BullyingBot.core.exception.UnknownCommandException
 import lviv.team.bullying.bot.BullyingBot.processor.BullingCommandProcessor;
 import lviv.team.bullying.bot.BullyingBot.processor.CommandProcessor;
 import lviv.team.bullying.bot.BullyingBot.processor.DefaultCommandProcessor;
+import lviv.team.bullying.bot.BullyingBot.response.ResponseMessages;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -74,7 +74,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (BullingBotException bullingBotException) {
             sendMessage(chatId, bullingBotException.getMessage());
         }catch (RuntimeException runtimeException){
-            sendMessage(chatId, "Something went wrong");
+            sendMessage(chatId, ResponseMessages.DEFAULT_EXCEPTION_RESPONSE);
         }
     }
 
