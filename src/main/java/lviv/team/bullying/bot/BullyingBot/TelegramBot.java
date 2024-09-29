@@ -15,8 +15,10 @@ import lviv.team.bullying.bot.BullyingBot.response.ResponseMessages;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.*;
@@ -47,10 +49,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     @Override
-    public void onUpdateReceived(Update update) {
+    public void onUpdateReceived(Update update){
+        if (isCommandForIgnore(update)){
+            System.out.println("COMMAND FOR IGNORE");
+            return;
+        }
+
         Long chatId = update.getMessage().getChatId();
 
-        System.out.println(update);
+        System.out.println(update.getMessage());
 
         try {
         List<MessageEntity> messageEntities = update.getMessage().getEntities();
@@ -107,5 +114,43 @@ public class TelegramBot extends TelegramLongPollingBot {
         return Arrays
                 .stream(commands)
                 .anyMatch(command -> command.getCommand().equals(specificCommand));
+    }
+
+    private boolean isCommandForIgnore(Update update){
+        boolean isCommandWithoutMessage = isCommandWithoutMessage(update.getMessage());
+
+        if (isCommandWithoutMessage) {
+            System.out.println("COMMAND WITHOUT MESSAGE: " + isCommandWithoutMessage);
+            return true;
+        }
+
+        boolean addingChatMember = isAddingChatMember(update.getMessage().getNewChatMembers());
+
+        if (addingChatMember) {
+            System.out.println("Adding chat member: " + addingChatMember);
+            return true;
+        }
+
+        boolean isChatMemberLeft = isChatMemberLeft(update.getMessage().getLeftChatMember());
+        if (isChatMemberLeft){
+            return true;
+        }
+
+        System.out.println("UPDATE: " + update);
+
+        return false;
+    }
+
+    private boolean isCommandWithoutMessage(Message message){
+        return Objects.isNull(message);
+    }
+
+
+    private boolean isAddingChatMember(List<User> users){
+        return !users.isEmpty();
+    }
+
+    private boolean isChatMemberLeft(User user){
+        return !Objects.isNull(user);
     }
 }
