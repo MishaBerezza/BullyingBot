@@ -51,7 +51,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update){
         if (isCommandForIgnore(update)){
-            System.out.println("COMMAND FOR IGNORE");
             return;
         }
 
@@ -120,14 +119,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         boolean isCommandWithoutMessage = isCommandWithoutMessage(update.getMessage());
 
         if (isCommandWithoutMessage) {
-            System.out.println("COMMAND WITHOUT MESSAGE: " + isCommandWithoutMessage);
             return true;
         }
 
         boolean addingChatMember = isAddingChatMember(update.getMessage().getNewChatMembers());
 
         if (addingChatMember) {
-            System.out.println("Adding chat member: " + addingChatMember);
             return true;
         }
 
@@ -135,8 +132,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (isChatMemberLeft){
             return true;
         }
-
-        System.out.println("UPDATE: " + update);
 
         return false;
     }
