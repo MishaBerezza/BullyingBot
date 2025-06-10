@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +47,23 @@ public class BullingService {
         }
 
         return bullingResponseParser.buildGetRecordsText(bullingRecords);
+    }
+
+    public List<String> getAllBullingRecordsByChatIdAndDays(long chatId, int days) {
+        Set<BullingRecord> bullingRecords = Set.copyOf(bullingRepo.findByChatId(chatId));
+
+        Set<BullingRecord> buildingRecordsToReturn = bullingRecords.stream().filter(bullingRecord -> {
+            long recordEpochSecond = bullingRecord.getDate();
+            Instant afterDate = Instant.ofEpochSecond(recordEpochSecond).minus(days, ChronoUnit.DAYS);
+
+            return Instant.ofEpochSecond(recordEpochSecond).isAfter(afterDate);
+        }).collect(Collectors.toSet());
+
+        if (buildingRecordsToReturn.isEmpty()) {
+            return bullingResponseParser.buildGetRecordsEmptyResulText();
+        }
+
+        return bullingResponseParser.buildGetRecordsText(buildingRecordsToReturn);
     }
 
     public List<String> getBullingRecordsByUserTag(long chatId, List<MessageEntity> messageEntities) {
